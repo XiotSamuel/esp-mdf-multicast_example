@@ -1,0 +1,64 @@
+menu "Example Configuration"
+
+config ROUTER_SSID
+    string "Router SSID"
+        default "ROUTER_SSID"
+        help
+            Router SSID.
+
+config ROUTER_PASSWORD
+    string "Router password"
+        default "ROUTER_PASSWORD"
+        help
+            Router password.
+
+config MESH_ID
+    string "Mesh ID"
+        default "123456"
+        help
+            Mesh network identification, Nodes with the same mesh ID can
+            communicate with each other.
+
+choice DEVICE_TM_TYPE
+    bool "Configure the device transmission role"
+    default DEVICE_TM_TYPE_READER
+    help
+        Configure the device role by reader/(multi)writer scheme
+
+config DEVICE_TM_TYPE_WRITER
+   bool "Multicast node (WRITER)"
+config DEVICE_TM_TYPE_READER
+   bool "Common node (READER)"
+endchoice
+
+config DEVICE_TM_TYPE
+    int
+    default 1 if DEVICE_TM_TYPE_WRITER
+    default 2 if DEVICE_TM_TYPE_READER
+			
+
+
+choice DEVICE_MESH_TYPE
+    bool "ESP-Mesh node type"
+    default DEVICE_MESH_TYPE_IDLE
+    help
+        Configure device to act as ROOT, NODE, LEAF or IDLE node type		
+
+config DEVICE_MESH_TYPE_IDLE
+   bool "Device type unset (autocfg by network)"
+config DEVICE_MESH_TYPE_ROOT
+   bool "Root device (AP for external networks)"
+config DEVICE_MESH_TYPE_NODE
+   bool "Non-Root device (common node between ROOT and LEAF(s))"
+config DEVICE_MESH_TYPE_LEAF
+   bool "Leaf node device (network branch terminal, no ancestors)"
+endchoice
+
+config DEVICE_MESH_TYPE
+    int
+	default 0 if DEVICE_MESH_TYPE_IDLE
+    default 1 if DEVICE_MESH_TYPE_ROOT
+    default 2 if DEVICE_MESH_TYPE_NODE
+	default 3 if DEVICE_MESH_TYPE_LEAF
+
+endmenu
